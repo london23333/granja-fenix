@@ -1053,10 +1053,33 @@ const App = {
   async pullFromGoogleSheets(silent){
     const url=this.GSHEETS_URL;
     if(!url||url.includes('PEGA_AQUÍ'))return;
+    let res, text;
     try{
-      const res=await fetch(url+(url.includes('?')?'&':'?')+'action=getall');
-      if(!res.ok)throw new Error('HTTP '+res.status);
-      const data=await res.json();
+      res=await fetch(url+(url.includes('?')?'&':'?')+'action=getall', {redirect:'follow'});
+    }catch(err){
+      console.error('Error de red al contactar Google Sheets:',err);
+      if(!silent)this.toast('⚠️ No hay conexión con Google Sheets (revisa tu internet)','warn');
+      return;
+    }
+    try{ text=await res.text(); }catch(err){ if(!silent)this.toast('⚠️ Respuesta vacía de Google Sheets','warn'); return; }
+    if(!res.ok){
+      console.error('Google Sheets respondió HTTP', res.status, text.slice(0,300));
+      if(!silent)this.toast(`⚠️ Google Sheets respondió error ${res.status}`,'warn');
+      return;
+    }
+    const trimmed=text.trim();
+    if(trimmed.startsWith('<')){
+      console.error('Google Sheets devolvió HTML en vez de JSON (probablemente falta doGet o no se actualizó la implementación):', text.slice(0,500));
+      if(!silent)this.toast('⚠️ Falta activar la lectura (doGet) en tu Apps Script, o no actualizaste la implementación','warn');
+      return;
+    }
+    let data;
+    try{ data=JSON.parse(trimmed); }catch(err){
+      console.error('La respuesta de Google Sheets no es JSON válido:',text.slice(0,500));
+      if(!silent)this.toast('⚠️ La respuesta de Google Sheets no es JSON válido (revisa el doGet)','warn');
+      return;
+    }
+    try{
       let changed=false;
       for(const [tipo,cfg] of Object.entries(this.SHEET_PULL_MAP)){
         if(this._mergeRows(cfg.col, data[tipo], cfg)) changed=true;
@@ -1090,7 +1113,7 @@ const App = {
       if(changed){ Store.save('gf_v5'); UI.renderPanel(UI.currentModule||'resumen'); this.updateScrollAlerts(); if(!silent)this.toast('🔄 Información actualizada desde Google Sheets','ok'); }
       else if(!silent) this.toast('✅ Ya tienes la información más reciente','info');
       const el=document.getElementById('lastGoogleSync'); if(el) el.textContent=new Date().toTimeString().slice(0,5);
-    }catch(err){ console.error('Error al leer Google Sheets:',err); if(!silent)this.toast('⚠️ No se pudo leer Google Sheets','warn'); }
+    }catch(err){ console.error('Error al procesar datos de Google Sheets:',err); if(!silent)this.toast('⚠️ Error al procesar los datos recibidos','warn'); }
   },
 
   // ─── CRUD: INSTALACIONES ───
