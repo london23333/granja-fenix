@@ -627,7 +627,7 @@ const UI = {
     // Datos para gráfico de barras (ventas últimos 6 meses)
     const mesesData = [];
     for(let i=5; i>=0; i--){ const d2=new Date(); d2.setMonth(d2.getMonth()-i); const m=d2.toISOString().slice(0,7); const total=d.ventas.filter(v=>v.fecha.startsWith(m)).reduce((s,v)=>s+v.total,0); mesesData.push({label:Utils.getMonthLabel(parseInt(m.split('-')[1])-1),value:total}); }
-    return `<section class="panel active" id="panel-resumen"><div class="sec-eye">MÓD-00 · GESTIÓN</div><div class="sec-title">Resumen gerencial</div><div class="sec-desc">Vista consolidada con KPIs en tiempo real. Los datos se respaldan automáticamente en Google Sheets.</div><div class="grid g6 mb"><div class="card kpi clickable" data-module="animales"><div class="klbl">Total animales</div><div class="kval">${totalAnim}</div></div><div class="card kpi clickable" data-module="ventas"><div class="klbl">Ventas del mes</div><div class="kval">${sim}${Utils.fmtN(Store.convertir(vMes))}</div></div><div class="card kpi clickable" data-module="cxc"><div class="klbl">Por cobrar</div><div class="kval">${sim}${Utils.fmtN(Store.convertir(cxc))}</div></div><div class="card kpi clickable" data-module="deudas"><div class="klbl">Deudas vigentes</div><div class="kval">${sim}${Utils.fmtN(Store.convertir(deudas))}</div></div><div class="card kpi clickable" data-module="reproduccion"><div class="klbl">Partos próx. 30d</div><div class="kval">${partos}</div></div><div class="card kpi clickable" data-module="personal"><div class="klbl">Nómina mensual</div><div class="kval">${sim}${Utils.fmtN(Store.convertir(nomina))}</div></div></div><div class="grid g21 mb"><div class="card"><div class="card-head"><h3>📊 Ventas últimos 6 meses</h3><span class="meta mono" id="chartMonedaLabel">en ${mon}</span></div><div id="r-bar-chart"></div></div><div class="card"><div class="card-head"><h3>⚡ Alertas activas</h3><span class="meta">${alerts.length} pendientes</span><button class="btn sm icon" style="margin-left:6px;" data-action="clear-notifications" title="Eliminar todas las notificaciones">✕</button></div><div class="alert-list">${alerts.length===0?'<div style="padding:6px 0;color:var(--soft);font-size:13px;">Sin alertas activas</div>':alerts.map(a=>`<div class="alrt"><div class="alrt-dot" style="background:${a.color}"></div><div><div class="at">${a.t}</div><div class="as">${a.s}</div></div><button class="btn sm icon del" data-action="delete-notificacion" data-id="${a.id}" style="font-size:10px;padding:1px 4px;">✕</button></div>`).join('')}</div></div></div><div class="grid g3"><div class="card"><div class="card-head"><h3>🎯 Avance de metas</h3></div><div>${this.renderMetaProgress()}</div></div><div class="card"><div class="card-head"><h3>🏠 Ocupación instalaciones</h3></div><div>${this.renderOcupacion()}</div></div><div class="card"><div class="card-head"><h3>💰 Egresos del mes</h3></div><div>${this.renderEgresos()}</div></div></div><div class="grid g3 mt"><div class="card"><div class="card-head"><h3>📈 Proyección de ventas</h3><span class="meta">próximos 3 meses</span></div><div>${this.renderProyeccion(vMes)}</div></div><div class="card"><div class="card-head"><h3>✅ Tareas del día <span style="background:var(--clay);color:#fff;border-radius:10px;padding:0 6px;font-size:11px;">${Store.get('tareas').filter(t=>!t.completada).length}</span></h3><button class="btn sm" data-action="add-tarea" style="font-size:11px;">+ Nueva</button></div><div>${this.renderTareasWidget()}</div></div><div class="card"><div class="card-head"><h3>📤 Google Sheets</h3><button class="btn pri sm" id="manualSyncBtn" style="font-size:11px;">📤 Enviar ahora</button><p style="font-size:11px;color:var(--soft);margin-top:4px;">Envío automático cada 2s después de cambios.</p><div style="font-size:11px;color:var(--brand);">Último: <span id="lastGoogleSync">—</span></div></div></div></div></section>`},
+    return `<section class="panel active" id="panel-resumen"><div class="sec-eye">MÓD-00 · GESTIÓN</div><div class="sec-title">Resumen gerencial</div><div class="sec-desc">Vista consolidada con KPIs en tiempo real. Los datos se respaldan automáticamente en Google Sheets.</div><div class="grid g6 mb"><div class="card kpi clickable" data-module="animales"><div class="klbl">Total animales</div><div class="kval">${totalAnim}</div></div><div class="card kpi clickable" data-module="ventas"><div class="klbl">Ventas del mes</div><div class="kval">${sim}${Utils.fmtN(Store.convertir(vMes))}</div></div><div class="card kpi clickable" data-module="cxc"><div class="klbl">Por cobrar</div><div class="kval">${sim}${Utils.fmtN(Store.convertir(cxc))}</div></div><div class="card kpi clickable" data-module="deudas"><div class="klbl">Deudas vigentes</div><div class="kval">${sim}${Utils.fmtN(Store.convertir(deudas))}</div></div><div class="card kpi clickable" data-module="reproduccion"><div class="klbl">Partos próx. 30d</div><div class="kval">${partos}</div></div><div class="card kpi clickable" data-module="personal"><div class="klbl">Nómina mensual</div><div class="kval">${sim}${Utils.fmtN(Store.convertir(nomina))}</div></div></div><div class="grid g21 mb"><div class="card"><div class="card-head"><h3>📊 Ventas últimos 6 meses</h3><span class="meta mono" id="chartMonedaLabel">en ${mon}</span></div><div id="r-bar-chart"></div></div><div class="card"><div class="card-head"><h3>⚡ Alertas activas</h3><span class="meta">${alerts.length} pendientes</span><button class="btn sm icon" style="margin-left:6px;" data-action="clear-notifications" title="Eliminar todas las notificaciones">✕</button></div><div class="alert-list">${alerts.length===0?'<div style="padding:6px 0;color:var(--soft);font-size:13px;">Sin alertas activas</div>':alerts.map(a=>`<div class="alrt"><div class="alrt-dot" style="background:${a.color}"></div><div><div class="at">${a.t}</div><div class="as">${a.s}</div></div><button class="btn sm icon del" data-action="delete-notificacion" data-id="${a.id}" style="font-size:10px;padding:1px 4px;">✕</button></div>`).join('')}</div></div></div><div class="grid g3"><div class="card"><div class="card-head"><h3>🎯 Avance de metas</h3></div><div>${this.renderMetaProgress()}</div></div><div class="card"><div class="card-head"><h3>🏠 Ocupación instalaciones</h3></div><div>${this.renderOcupacion()}</div></div><div class="card"><div class="card-head"><h3>💰 Egresos del mes</h3></div><div>${this.renderEgresos()}</div></div></div><div class="grid g3 mt"><div class="card"><div class="card-head"><h3>📈 Proyección de ventas</h3><span class="meta">próximos 3 meses</span></div><div>${this.renderProyeccion(vMes)}</div></div><div class="card"><div class="card-head"><h3>✅ Tareas del día <span style="background:var(--clay);color:#fff;border-radius:10px;padding:0 6px;font-size:11px;">${Store.get('tareas').filter(t=>!t.completada).length}</span></h3><button class="btn sm" data-action="add-tarea" style="font-size:11px;">+ Nueva</button></div><div>${this.renderTareasWidget()}</div></div><div class="card"><div class="card-head"><h3>📤 Google Sheets</h3><div style="display:flex;gap:4px;flex-wrap:wrap;"><button class="btn pri sm" data-action="manual-sync" style="font-size:11px;">📤 Enviar ahora</button><button class="btn sec sm" data-action="manual-pull" style="font-size:11px;">🔄 Actualizar</button></div><p style="font-size:11px;color:var(--soft);margin-top:4px;">Envío automático cada 2s después de cambios. Lectura automática cada 20s.</p><div style="font-size:11px;color:var(--brand);">Último: <span id="lastGoogleSync">—</span></div></div></div></div></section>`},
   renderTareasWidget(){const t=Store.get('tareas').filter(t=>!t.completada).slice(0,4);if(t.length===0)return'<div style="padding:6px 0;color:var(--soft);font-size:13px;">✅ Sin tareas pendientes hoy</div>';return t.map(ti=>{const col=ti.prioridad==='Alta'?'var(--clay)':ti.prioridad==='Media'?'var(--gold)':'var(--brand)';return`<div style="display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px solid var(--line);"><span style="width:5px;height:5px;border-radius:50%;background:${col};flex-shrink:0;"></span><span style="font-size:12px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${Utils.escapeHtml(ti.titulo)}</span><button class="btn sm" style="font-size:10px;padding:1px 5px;min-height:20px;" data-action="complete-tarea" data-id="${ti.id}">✓</button></div>`}).join('')},
   renderMetaProgress(){const m=Store.get('metas').slice(0,4);if(m.length===0)return'<p style="color:var(--soft);font-size:12px;">Sin metas definidas</p>';return m.map(x=>{const p=this.calcMetaPct(x);const col=p>=80?'var(--brand)':p>=50?'var(--gold)':'var(--clay)';return`<div class="hrow"><div class="htop"><span>${x.titulo}</span><span class="mono">${p}%</span></div><div class="htrack"><div class="hfill" style="width:${p}%;background:${col}"></div></div></div>`}).join('')},
   renderOcupacion(){const inst=Store.data.instalaciones.filter(i=>i.tipo==='Producción');if(inst.length===0)return'<p style="color:var(--soft);font-size:12px;">Sin instalaciones de producción</p>';return inst.map(i=>{const p=i.cap>0?Math.round(i.ocup/i.cap*100):0;const col=p>=95?'var(--clay)':p>=85?'var(--gold)':'var(--brand)';return`<div class="hrow"><div class="htop"><span>${i.nombre.replace('Galpón ','')}</span><span class="mono">${p}%</span></div><div class="htrack"><div class="hfill" style="width:${p}%;background:${col}"></div></div></div>`}).join('')},
@@ -788,7 +788,6 @@ const App = {
     document.addEventListener('input',(e2)=>{if(e2.target.id==='gSearchInput')this.runGlobalSearch(e2.target.value)});
     document.getElementById('globalSearch').addEventListener('click',(e2)=>{if(e2.target===e2.currentTarget)this.closeSearch()});
     window.addEventListener('scroll',()=>{const btn=document.getElementById('scrollTopBtn');if(btn)btn.classList.toggle('show',window.scrollY>300)});
-    document.getElementById('manualSyncBtn')?.addEventListener('click',()=>{ this.sendDataToGoogleSheets(); });
     document.addEventListener('keydown',(e)=>{
       if((e.ctrlKey||e.metaKey)&&e.key==='k'){e.preventDefault();this.toggleSearch()}
       if(e.key==='F11'){e.preventDefault();if(!document.fullscreenElement){document.documentElement.requestFullscreen().catch(()=>{})}else{document.exitFullscreen().catch(()=>{})}}
@@ -830,6 +829,8 @@ const App = {
     setInterval(()=>{ const ts=parseInt(sessionStorage.getItem('gf_session_ts')||'0'); if(ts&&Date.now()-ts>3600000){ this.toast('⏱ Sesión expirada por inactividad','warn'); setTimeout(()=>{sessionStorage.clear();location.reload()},2000); } else if(ts) sessionStorage.setItem('gf_session_ts',Date.now().toString()); },60000);
     setTimeout(()=>this.renderCharts(),300);
     this.fetchDolarToday();
+    setTimeout(()=>this.pullFromGoogleSheets(true),1500);
+    setInterval(()=>this.pullFromGoogleSheets(true),20000);
     this.updateScrollAlerts();
     setInterval(()=>this.updateScrollAlerts(),30000);
     document.addEventListener('keydown',(e)=>{ if(e.key==='Escape'){UI.closeModal();UI.closeNotifModal();UI.closePasswordModal();this.closeSearch()} });
@@ -880,7 +881,7 @@ const App = {
       'print-report':()=>this.printReport(id),'show-notifications':()=>this.showNotifications(),
       'export-inventario':()=>this.exportCSV('inventario'),'export-animales':()=>this.exportCSV('animales'),'export-personal':()=>this.exportCSV('personal'),
       'export-ventas':()=>this.exportCSV('ventas'),'export-cxc':()=>this.exportCSV('cxc'),'export-gastos':()=>this.exportCSV('gastos'),
-      'export-backup':()=>this.exportBackup(),'save-config':()=>this.saveConfig(),'add-usuario':()=>this.addUsuario(),'delete-usuario':()=>this.deleteUsuario(id),
+      'export-backup':()=>this.exportBackup(),'save-config':()=>this.saveConfig(),'add-usuario':()=>this.addUsuario(),'delete-usuario':()=>this.deleteUsuario(id),'manual-sync':()=>this.sendDataToGoogleSheets(),'manual-pull':()=>this.pullFromGoogleSheets(false),
       'import-backup':()=>document.getElementById('importBackupInput')?.click(),
       'reset-sync':()=>this.resetSyncFlags(),
       'change-password':()=>this.changePassword(),
@@ -960,6 +961,7 @@ const App = {
       const params = new URLSearchParams();
       params.append('key', this.GSHEETS_KEY);
       params.append('tipo', tipo);
+      params.append('id', item.id);
       params.append('fecha_envio', now);
       params.append('hora_envio', hora);
       for(const [k,v] of Object.entries(campos)) params.append(k, v ?? '');
@@ -1006,6 +1008,89 @@ const App = {
       if(el) el.textContent = hora;
       this.toast(`📤 Sincronizando ${enviados} registro(s) nuevos...`, 'info');
     }
+  },
+
+  // ─── TRAER DATOS DESDE GOOGLE SHEETS (sincronización en ambos sentidos) ───
+  SHEET_PULL_MAP: {
+    animal:{col:'animales', map:{arete:'arete',sexo:'sexo',etapa:'etapa',galpon:'galpon',peso:'peso',nacimiento:'nacimiento',raza:'raza',estado:'estado',padre:'padre',madre:'madre'}, num:['peso']},
+    cliente:{col:'clientes', map:{nombre:'nombre',tipo:'tipo',tel:'tel',email:'email',dir:'dir'}},
+    reproduccion:{col:'reproduccion', map:{cerda:'cerda',padrillo:'padrillo',fecha_monta:'fechaMonta',parto_estimado:'partoEst',estado:'estadoR',esperados:'esp',nacidos:'nac',notas:'notas'}, num:['esp','nac']},
+    alimentacion:{col:'alimentacion', map:{fecha:'fecha',galpon:'galpon',animal:'animal',tipo:'tipo',dieta:'dieta',alimento:'alimento',ganancia:'ganancia',costo:'costo',notas:'notas'}, num:['alimento','ganancia','costo']},
+    vacuna:{col:'vacunas', map:{animal:'animal',vacuna:'vacuna',dosis:'dosis',fecha_aplicacion:'fechaApl',proxima_dosis:'proxDosis',origen:'origen',aplicado_por:'aplicadoPor',notas:'notas'}},
+    evento:{col:'eventos', map:{fecha:'fecha',tipo:'tipo',animal:'animal',descripcion:'desc',tratamiento:'tratamiento',estado:'estadoE'}},
+    personal:{col:'personal', map:{nombre:'nombre',cargo:'cargo',area:'area',turno:'turno',ingreso:'ingreso',salario:'salario',estado:'estado',telefono:'tel',comentarios:'comentarios'}, num:['salario']},
+    deuda:{col:'deudas', map:{acreedor:'acreedor',concepto:'concepto',original:'orig',saldo:'saldo',proximo_pago:'proximoPago',vencimiento:'vencPago',estado:'estado'}, num:['orig','saldo']},
+    meta:{col:'metas', map:{titulo:'titulo',descripcion:'desc',valor_meta:'valorMeta',unidad:'unidad',tipo:'tipo',modulo:'modulo',estado:'estado',fecha_meta:'fechaMeta'}, num:['valorMeta']},
+    tarea:{col:'tareas', map:{titulo:'titulo',descripcion:'desc',fecha:'fecha',prioridad:'prioridad',completada:'completada'}, bool:['completada']},
+    celo:{col:'celo', map:{cerda:'cerda',fecha_celo:'fechaCelo',sintomas:'sintomas',accion:'accion',observaciones:'desc',estado:'estado'}},
+    inventario:{col:'inventario', map:{producto:'producto',cat:'cat',stock:'stock',unidad:'unidad',min:'min',proveedor:'prov',precio:'precio'}, num:['stock','min','precio']},
+  },
+
+  _normFecha(v){ if(v==null||v==='')return ''; if(typeof v==='string'&&v.includes('T'))return v.split('T')[0]; if(typeof v==='string')return v; return ''; },
+
+  _mergeRows(colName, rows, cfg){
+    if(!rows||!Array.isArray(rows))return false;
+    const local=Store.data[colName]; if(!local)return false;
+    let changed=false;
+    for(const row of rows){
+      const id=row.id; if(!id)continue;
+      const obj={id};
+      for(const [sheetKey,localKey] of Object.entries(cfg.map)){
+        let v=row[sheetKey];
+        if(cfg.num&&cfg.num.includes(localKey)) v=parseFloat(v)||0;
+        else if(cfg.bool&&cfg.bool.includes(localKey)) v=(v==='Sí'||v===true);
+        else if(typeof v==='string'&&v.includes('T')&&/^\d{4}-\d{2}-\d{2}T/.test(v)) v=this._normFecha(v);
+        obj[localKey]=v;
+      }
+      const idx=local.findIndex(x=>x.id===id);
+      if(idx===-1){ obj._synced=true; local.push(obj); changed=true; }
+      else if(local[idx]._synced){ const before=JSON.stringify(local[idx]); Object.assign(local[idx],obj); local[idx]._synced=true; if(JSON.stringify(local[idx])!==before) changed=true; }
+      // si el registro local tiene cambios sin enviar (_synced=false), no se sobrescribe para no perder lo que el usuario está editando
+    }
+    return changed;
+  },
+
+  async pullFromGoogleSheets(silent){
+    const url=this.GSHEETS_URL;
+    if(!url||url.includes('PEGA_AQUÍ'))return;
+    try{
+      const res=await fetch(url+(url.includes('?')?'&':'?')+'action=getall');
+      if(!res.ok)throw new Error('HTTP '+res.status);
+      const data=await res.json();
+      let changed=false;
+      for(const [tipo,cfg] of Object.entries(this.SHEET_PULL_MAP)){
+        if(this._mergeRows(cfg.col, data[tipo], cfg)) changed=true;
+      }
+      // VENTAS (requieren reconstruir el cliente por nombre)
+      if(Array.isArray(data.venta)){
+        for(const row of data.venta){
+          const id=row.id; if(!id) continue;
+          let cli=Store.data.clientes.find(c=>c.nombre===row.cliente);
+          if(!cli){ cli={id:Utils.uid(),nombre:row.cliente||'Cliente',tipo:'Minorista',tel:'',email:'',_synced:true}; Store.data.clientes.push(cli); changed=true; }
+          const obj={id, clienteId:cli.id, fecha:this._normFecha(row.venta_fecha), tipo:row.tipo, cant:parseFloat(row.cant)||0, kg:parseFloat(row.kg)||0, precio:parseFloat(row.precio)||0, total:parseFloat(row.total)||0, pago:row.pago, estado:row.estado, vence:this._normFecha(row.vence)};
+          const idx=Store.data.ventas.findIndex(x=>x.id===id);
+          if(idx===-1){ obj._synced=true; Store.data.ventas.push(obj); changed=true; }
+          else if(Store.data.ventas[idx]._synced){ const before=JSON.stringify(Store.data.ventas[idx]); Object.assign(Store.data.ventas[idx],obj); Store.data.ventas[idx]._synced=true; if(JSON.stringify(Store.data.ventas[idx])!==before)changed=true; }
+        }
+      }
+      // GASTOS (se reparten entre 'gastos' y 'gastosVenta' según tipo_gasto)
+      if(Array.isArray(data.gasto)){
+        for(const row of data.gasto){
+          const id=row.id; if(!id) continue;
+          const esVenta=row.tipo_gasto==='venta';
+          const dest=esVenta?'gastosVenta':'gastos';
+          const obj=esVenta
+            ? {id, fecha:this._normFecha(row.gasto_fecha), cat:row.cat, concepto:row.desc, monto:parseFloat(row.monto)||0}
+            : {id, fecha:this._normFecha(row.gasto_fecha), cat:row.cat, desc:row.desc, monto:parseFloat(row.monto)||0};
+          const idx=Store.data[dest].findIndex(x=>x.id===id);
+          if(idx===-1){ obj._synced=true; Store.data[dest].push(obj); changed=true; }
+          else if(Store.data[dest][idx]._synced){ const before=JSON.stringify(Store.data[dest][idx]); Object.assign(Store.data[dest][idx],obj); Store.data[dest][idx]._synced=true; if(JSON.stringify(Store.data[dest][idx])!==before)changed=true; }
+        }
+      }
+      if(changed){ Store.save('gf_v5'); UI.renderPanel(UI.currentModule||'resumen'); this.updateScrollAlerts(); if(!silent)this.toast('🔄 Información actualizada desde Google Sheets','ok'); }
+      else if(!silent) this.toast('✅ Ya tienes la información más reciente','info');
+      const el=document.getElementById('lastGoogleSync'); if(el) el.textContent=new Date().toTimeString().slice(0,5);
+    }catch(err){ console.error('Error al leer Google Sheets:',err); if(!silent)this.toast('⚠️ No se pudo leer Google Sheets','warn'); }
   },
 
   // ─── CRUD: INSTALACIONES ───
